@@ -3,7 +3,12 @@ server:
 
 spring:
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://148.70.30.245:3306/stock
     username: root
     password: zycao@2012_czy
+
+  data:
+    mongodb:
+      uri: mongodb://stock:stock_2012_mongo@148.70.30.245:27017/stock
