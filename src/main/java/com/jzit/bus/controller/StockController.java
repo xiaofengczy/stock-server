@@ -26,7 +26,6 @@ public class StockController {
 
   @PostMapping("/addTrader")
   public Mono<Result> addTrader(@RequestBody AddTraderReq addTraderReq){
-    System.out.println(addTraderReq);
     return stockService.addTrader(addTraderReq);
   }
 

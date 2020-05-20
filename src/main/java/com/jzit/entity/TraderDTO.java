@@ -1,6 +1,8 @@
-package com.jzit.dto;
+package com.jzit.entity;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * FileName: AddTraderReq Description:
@@ -8,8 +10,12 @@ import lombok.Data;
  * @author milk
  * @create 2020/5/19
  */
+@Document(collection = "TraderDTO")
 @Data
-public class AddTraderReq {
+public class TraderDTO {
+
+  @Id
+  private String id;
 
   private String news;
 
