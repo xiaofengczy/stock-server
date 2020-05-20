@@ -1,8 +1,10 @@
 package com.jzit.bus.service;
 
 import com.jzit.dto.AddTraderReq;
+import com.jzit.dto.req.PageTraderReq;
+import com.jzit.entity.TraderDTO;
 import com.jzit.utils.Result;
-import reactor.core.publisher.Mono;
+import java.util.List;
 
 /**
  * FileName: StockService Description:
@@ -12,5 +14,7 @@ import reactor.core.publisher.Mono;
  */
 public interface StockService {
 
-  Mono<Result> addTrader(AddTraderReq addTraderReq);
+  Result<TraderDTO> addTrader(AddTraderReq addTraderReq);
+
+  Result<List<TraderDTO>> listTrader(PageTraderReq pageTraderReq);
 }
