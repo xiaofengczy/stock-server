@@ -39,23 +39,22 @@ public class StockServiceImpl implements StockService {
 
   @Override
   public Result<List<TraderDTO>> listTrader(PageTraderReq pageTraderReq) {
-    Query query = new Query();
-    String traderDate = pageTraderReq.getTraderDate();
-    String traderId = pageTraderReq.getTraderId();
-    if(!StringUtils.isEmpty(traderDate)){
-      query.addCriteria(Criteria.where("traderTime").is(pageTraderReq.getTraderDate()));
-    }
-    if(!StringUtils.isEmpty(traderId)){
-      query.addCriteria(Criteria.where("_id").is(pageTraderReq.getTraderId()));
-    }
     Integer page = pageTraderReq.getPage();
     Integer pageSize = pageTraderReq.getPageSize();
-    List<TraderDTO> traderDTOS = mongoTemplate.find(query, TraderDTO.class);
-    if(CollectionUtils.isEmpty(traderDTOS)){
-      return Result.success(Lists.newArrayList());
+    Query query = new Query().skip((page - 1) * pageSize).limit(pageSize);
+    String traderDate = pageTraderReq.getTraderDate();
+    String traderId = pageTraderReq.getTraderId();
+    String title = pageTraderReq.getTitle();
+    if (!StringUtils.isEmpty(traderDate)) {
+      query.addCriteria(Criteria.where("traderTime").is(traderDate));
     }
-    List<TraderDTO> collect = traderDTOS.stream().skip((page - 1) * pageSize).limit(pageSize)
-        .collect(Collectors.toList());
-    return Result.success(collect);
+    if (!StringUtils.isEmpty(traderId)) {
+      query.addCriteria(Criteria.where("_id").is(traderId));
+    }
+    if (!StringUtils.isEmpty(title)) {
+      query.addCriteria(Criteria.where("title").is(title));
+    }
+    List<TraderDTO> traderDTOS = mongoTemplate.find(query, TraderDTO.class);
+    return Result.success(traderDTOS);
   }
 }

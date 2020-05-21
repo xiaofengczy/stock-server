@@ -17,6 +17,8 @@ public class TraderDTO {
   @Id
   private String id;
 
+  private String title;
+
   private String news;
 
   private String stockAnalysis;

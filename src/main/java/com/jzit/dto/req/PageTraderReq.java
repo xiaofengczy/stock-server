@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class PageTraderReq {
 
+  private String title;
+
   private String traderId;
 
   private Integer page=1;

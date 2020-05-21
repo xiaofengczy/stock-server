@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class AddTraderReq {
 
+  private String title;
+
   private String news;
 
   private String stockAnalysis;
