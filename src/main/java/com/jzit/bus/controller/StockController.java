@@ -3,10 +3,13 @@ package com.jzit.bus.controller;
 import com.jzit.bus.service.StockService;
 import com.jzit.dto.AddTraderReq;
 import com.jzit.dto.req.PageTraderReq;
+import com.jzit.dto.res.TraderFieldRes;
 import com.jzit.entity.TraderDTO;
 import com.jzit.utils.Result;
 import java.util.List;
 import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,4 +38,8 @@ public class StockController {
     return stockService.listTrader(pageTraderReq);
   }
 
+  @GetMapping("/getStock/{id}")
+  public Result<TraderDTO> getStock(@PathVariable String id){
+    return stockService.getStock(id);
+  }
 }

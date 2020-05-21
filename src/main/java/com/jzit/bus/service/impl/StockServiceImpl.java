@@ -57,4 +57,10 @@ public class StockServiceImpl implements StockService {
     List<TraderDTO> traderDTOS = mongoTemplate.find(query, TraderDTO.class);
     return Result.success(traderDTOS);
   }
+
+  @Override
+  public Result<TraderDTO> getStock(String id) {
+    TraderDTO traderDTO = mongoTemplate.findById(id, TraderDTO.class);
+    return Result.success(traderDTO);
+  }
 }

@@ -17,4 +17,6 @@ public interface StockService {
   Result<TraderDTO> addTrader(AddTraderReq addTraderReq);
 
   Result<List<TraderDTO>> listTrader(PageTraderReq pageTraderReq);
+
+  Result<TraderDTO> getStock(String id);
 }
