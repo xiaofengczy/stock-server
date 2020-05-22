@@ -23,4 +23,6 @@ public class AddTraderReq {
 
   private String inputTime;
 
+  private String marketAnalysis;
+
 }
