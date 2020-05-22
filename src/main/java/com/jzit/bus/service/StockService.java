@@ -19,4 +19,6 @@ public interface StockService {
   Result<List<TraderDTO>> listTrader(PageTraderReq pageTraderReq);
 
   Result<TraderDTO> getStock(String id);
+
+  Result<Boolean> deleteStock(String id);
 }

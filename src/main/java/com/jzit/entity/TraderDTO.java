@@ -25,9 +25,9 @@ public class TraderDTO {
 
   private String tradersSuggested;
 
-  private String traderTime;
+  private Long traderTime;
 
-  private String inputTime;
+  private Long inputTime;
 
   private String marketAnalysis;
 
