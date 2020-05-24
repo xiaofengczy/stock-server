@@ -83,36 +83,79 @@
     </dependency>
   </dependencies>
 
-  <!--设置构建插件及环境-->
+  <!--  &lt;!&ndash;设置构建插件及环境&ndash;&gt;-->
+  <!--  <build>-->
+  <!--    <pluginManagement>-->
+  <!--      <plugins>-->
+  <!--        <plugin>-->
+  <!--          <groupId>org.apache.maven.plugins</groupId>-->
+  <!--          <artifactId>maven-compiler-plugin</artifactId>-->
+  <!--          <version>3.8.1</version>-->
+  <!--          &lt;!&ndash;构建设置&ndash;&gt;-->
+  <!--          <configuration>-->
+  <!--            <encoding>utf-8</encoding>-->
+  <!--            &lt;!&ndash;java编译版本&ndash;&gt;-->
+  <!--            <source>${jdk.version}</source>-->
+  <!--            <target>${jdk.version}</target>-->
+  <!--          </configuration>-->
+  <!--        </plugin>-->
+  <!--        <plugin>-->
+  <!--          <groupId>org.apache.maven.plugins</groupId>-->
+  <!--          <artifactId>maven-jar-plugin</artifactId>-->
+  <!--          <version>3.0.2</version>-->
+  <!--          <configuration>-->
+  <!--            <archive>-->
+  <!--              <manifest>-->
+  <!--                <mainClass>com.jzit.StockApplication</mainClass>-->
+  <!--              </manifest>-->
+  <!--            </archive>-->
+  <!--          </configuration>-->
+  <!--        </plugin>-->
+  <!--      </plugins>-->
+  <!--    </pluginManagement>-->
+  <!--  </build>-->
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.1</version>
-          <!--构建设置-->
-          <configuration>
-            <encoding>utf-8</encoding>
-            <!--java编译版本-->
-            <source>${jdk.version}</source>
-            <target>${jdk.version}</target>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
-          <configuration>
-            <archive>
-              <manifest>
-                <mainClass>com.jzit.StockApplication</mainClass>
-              </manifest>
-            </archive>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <!-- docker的maven插件，官网： https://github.com/spotify/docker-maven-plugin -->
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>1.2.0</version>
+        <executions>
+          <execution>
+            <id>build-image</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!--设置镜像名称-->
+          <imageName>${project.artifactId}</imageName>
+          <!--指定dockerfile位置-->
+          <dockerDirectory>${project.basedir}/src/main</dockerDirectory>
+          <dockerHost>http://148.70.30.245:2375</dockerHost>
+          <imageTags>
+            <imageTag>${project.version}</imageTag>
+          </imageTags>
+          <resources>
+            <resource>
+              <!--复制资源至docker镜像中位置-->
+              <targetPath>/</targetPath>
+              <!--资源打包后文件夹-->
+              <directory>${project.build.directory}</directory>
+              <!--资源打包后文件名-->
+              <include>${project.build.finalName}.jar</include>
+            </resource>
+          </resources>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
 </project>
