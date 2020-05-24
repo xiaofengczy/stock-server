@@ -4,17 +4,20 @@ import com.jzit.bus.service.TraderService;
 import com.jzit.dto.req.AddTraderReq;
 import com.jzit.dto.req.EditTraderReq;
 import com.jzit.dto.req.PageTraderReq;
+import com.jzit.dto.res.PageTraderRes;
 import com.jzit.entity.TraderDTO;
 import com.jzit.utils.DateUtil;
 import com.jzit.utils.Result;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -42,10 +45,10 @@ public class TraderServiceImpl implements TraderService {
   }
 
   @Override
-  public Result<List<TraderDTO>> listTrader(PageTraderReq pageTraderReq) {
+  public Result<PageTraderRes> listTrader(PageTraderReq pageTraderReq) {
     Integer page = pageTraderReq.getPage();
     Integer pageSize = pageTraderReq.getPageSize();
-    Query query = new Query().skip((page - 1) * pageSize).limit(pageSize);
+    Query query = new Query();
     String traderDate = pageTraderReq.getTraderDate();
     String traderId = pageTraderReq.getTraderId();
     String title = pageTraderReq.getTitle();
@@ -60,7 +63,17 @@ public class TraderServiceImpl implements TraderService {
       query.addCriteria(Criteria.where("title").is(title));
     }
     List<TraderDTO> traderDTOS = mongoTemplate.find(query, TraderDTO.class);
-    return Result.success(traderDTOS);
+    PageTraderRes pageTraderRes = new PageTraderRes();
+    pageTraderRes.setPage(page);
+    pageTraderRes.setPageSize(pageSize);
+    pageTraderRes.setTotal(traderDTOS.size());
+    if(CollectionUtils.isEmpty(traderDTOS)){
+      return Result.success(pageTraderRes);
+    }
+    List<TraderDTO> pageTraderList = traderDTOS.stream().skip((page - 1) * pageSize).limit(pageSize)
+        .collect(Collectors.toList());
+    pageTraderRes.setTraderList(pageTraderList);
+    return Result.success(pageTraderRes);
   }
 
   @Override

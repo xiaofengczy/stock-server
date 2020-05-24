@@ -4,9 +4,9 @@ import com.jzit.bus.service.StockService;
 import com.jzit.dto.req.AddStockReq;
 import com.jzit.dto.req.EditStockReq;
 import com.jzit.dto.req.PageStockReq;
+import com.jzit.dto.res.PageStockRes;
 import com.jzit.entity.StockDTO;
 import com.jzit.utils.Result;
-import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +35,7 @@ public class StockController {
   }
 
   @PostMapping("/listStock")
-  public Result<List<StockDTO>> listStock(@RequestBody PageStockReq pageStockReq){
+  public Result<PageStockRes> listStock(@RequestBody PageStockReq pageStockReq){
     return stockService.listStock(pageStockReq);
   }
 

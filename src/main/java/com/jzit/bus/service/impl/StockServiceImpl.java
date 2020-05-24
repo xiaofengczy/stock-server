@@ -4,16 +4,20 @@ import com.jzit.bus.service.StockService;
 import com.jzit.dto.req.AddStockReq;
 import com.jzit.dto.req.EditStockReq;
 import com.jzit.dto.req.PageStockReq;
+import com.jzit.dto.res.PageStockRes;
 import com.jzit.entity.StockDTO;
 import com.jzit.utils.Result;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -32,10 +36,10 @@ public class StockServiceImpl implements StockService {
   }
 
   @Override
-  public Result<List<StockDTO>> listStock(PageStockReq pageStockReq) {
+  public Result<PageStockRes> listStock(PageStockReq pageStockReq) {
     Integer page = pageStockReq.getPage();
     Integer pageSize = pageStockReq.getPageSize();
-    Query query = new Query().skip((page - 1) * pageSize).limit(pageSize);
+    Query query = new Query();
     String stockId = pageStockReq.getStockId();
     String name = pageStockReq.getName();
     String code = pageStockReq.getCode();
@@ -49,7 +53,17 @@ public class StockServiceImpl implements StockService {
       query.addCriteria(Criteria.where("code").is(code));
     }
     List<StockDTO> stockDTOS = mongoTemplate.find(query, StockDTO.class);
-    return Result.success(stockDTOS);
+    PageStockRes pageStockRes = new PageStockRes();
+    pageStockRes.setPage(page);
+    pageStockRes.setPageSize(pageSize);
+    pageStockRes.setTotal(stockDTOS.size());
+    if(CollectionUtils.isEmpty(stockDTOS)){
+      return Result.success(pageStockRes);
+    }
+    List<StockDTO> pageStockList = stockDTOS.stream().skip((page - 1) * pageSize).limit(pageSize)
+        .collect(Collectors.toList());
+    pageStockRes.setStockList(pageStockList);
+    return Result.success(pageStockRes);
   }
 
   @Override

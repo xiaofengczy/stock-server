@@ -4,9 +4,9 @@ import com.jzit.bus.service.TraderService;
 import com.jzit.dto.req.AddTraderReq;
 import com.jzit.dto.req.EditTraderReq;
 import com.jzit.dto.req.PageTraderReq;
+import com.jzit.dto.res.PageTraderRes;
 import com.jzit.entity.TraderDTO;
 import com.jzit.utils.Result;
-import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +35,7 @@ public class TraderController {
   }
 
   @PostMapping("/listTrader")
-  public Result<List<TraderDTO>> listTrader(@RequestBody PageTraderReq pageTraderReq){
+  public Result<PageTraderRes> listTrader(@RequestBody PageTraderReq pageTraderReq){
     return traderService.listTrader(pageTraderReq);
   }
 
