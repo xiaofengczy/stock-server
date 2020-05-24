@@ -1,6 +1,6 @@
 package com.jzit.bus.controller;
 
-import com.jzit.bus.service.StockService;
+import com.jzit.bus.service.TraderService;
 import com.jzit.dto.req.AddTraderReq;
 import com.jzit.dto.req.EditTraderReq;
 import com.jzit.dto.req.PageTraderReq;
@@ -27,30 +27,30 @@ import org.springframework.web.bind.annotation.RestController;
 public class TraderController {
 
   @Resource
-  private StockService stockService;
+  private TraderService traderService;
 
   @PostMapping("/addTrader")
   public Result<TraderDTO> addTrader(@RequestBody AddTraderReq addTraderReq){
-    return stockService.addTrader(addTraderReq);
+    return traderService.addTrader(addTraderReq);
   }
 
   @PostMapping("/listTrader")
   public Result<List<TraderDTO>> listTrader(@RequestBody PageTraderReq pageTraderReq){
-    return stockService.listTrader(pageTraderReq);
+    return traderService.listTrader(pageTraderReq);
   }
 
   @GetMapping("/getTrader/{id}")
   public Result<TraderDTO> getTrader(@PathVariable String id){
-    return stockService.getStock(id);
+    return traderService.getStock(id);
   }
 
   @DeleteMapping("/delTrader/{id}")
   public Result<Boolean> delTrader(@PathVariable String id){
-    return stockService.deleteStock(id);
+    return traderService.deleteStock(id);
   }
 
   @PostMapping("/editTrader")
   public Result<TraderDTO> editTrader(@RequestBody EditTraderReq editTraderReq){
-    return stockService.editStock(editTraderReq);
+    return traderService.editStock(editTraderReq);
   }
 }

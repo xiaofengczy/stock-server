@@ -1,6 +1,6 @@
 package com.jzit.bus.service.impl;
 
-import com.jzit.bus.service.StockService;
+import com.jzit.bus.service.TraderService;
 import com.jzit.dto.req.AddTraderReq;
 import com.jzit.dto.req.EditTraderReq;
 import com.jzit.dto.req.PageTraderReq;
@@ -24,7 +24,7 @@ import org.springframework.util.StringUtils;
  * @create 2020/5/19
  */
 @Service
-public class StockServiceImpl implements StockService {
+public class TraderServiceImpl implements TraderService {
 
   @Resource
   private MongoTemplate mongoTemplate;

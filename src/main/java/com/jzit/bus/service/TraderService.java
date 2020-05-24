@@ -13,7 +13,7 @@ import java.util.List;
  * @author caozhongyu
  * @create 2020/5/19
  */
-public interface StockService {
+public interface TraderService {
 
   Result<TraderDTO> addTrader(AddTraderReq addTraderReq);
 
