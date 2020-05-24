@@ -6,9 +6,11 @@ import com.jzit.dto.req.EventReq;
 import com.jzit.dto.req.PageEventReq;
 import com.jzit.dto.res.PageEventRes;
 import com.jzit.entity.EventDTO;
+import com.jzit.utils.DateUtil;
 import com.jzit.utils.Result;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +20,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.util.unit.DataUnit;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -29,7 +32,7 @@ public class EventServiceImpl implements EventService {
   public Result<EventDTO> addEvent(EventReq eventReq) {
     EventDTO eventDTO = new EventDTO();
     BeanUtils.copyProperties(eventReq,eventDTO);
-    eventDTO.setCreateTime(new Date().getTime());
+    eventDTO.setCreateTime(DateUtil.strToLong(eventReq.getEventTime(),DateUtil.DATE_FORMAT));
     EventDTO result = mongoTemplate.save(eventDTO);
     return Result.success(result);
   }
@@ -40,12 +43,12 @@ public class EventServiceImpl implements EventService {
     Integer pageSize = pageEventReq.getPageSize();
     Query query = new Query();
     String eventId = pageEventReq.getEventId();
-    Long eventTime = pageEventReq.getEventTime();
+    String createTime = pageEventReq.getCreateTime();
     if (!StringUtils.isEmpty(eventId)) {
       query.addCriteria(Criteria.where("_id").is(eventId));
     }
-    if (!StringUtils.isEmpty(eventTime)) {
-      query.addCriteria(Criteria.where("createTime").is(eventTime));
+    if (!StringUtils.isEmpty(createTime)) {
+      query.addCriteria(Criteria.where("createTime").is(DateUtil.strToLong(createTime,DateUtil.DATE_FORMAT)));
     }
     List<EventDTO> eventDTOS = mongoTemplate.find(query, EventDTO.class);
     PageEventRes pageEventRes = new PageEventRes();

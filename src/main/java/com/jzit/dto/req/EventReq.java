@@ -11,4 +11,6 @@ public class EventReq {
 
   private String goodStock;
 
+  private String eventTime;
+
 }

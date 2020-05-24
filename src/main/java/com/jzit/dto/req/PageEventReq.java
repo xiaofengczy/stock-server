@@ -9,7 +9,7 @@ public class PageEventReq {
 
   private String eventName;
 
-  private Long eventTime;
+  private String createTime;
 
   private Integer page=1;
 
