@@ -68,7 +68,7 @@ public class StockServiceImpl implements StockService {
 
   @Override
   public Result<StockDTO> editStock(EditStockReq editStockReq) {
-    deleteStock(editStockReq.getTraderId());
+    deleteStock(editStockReq.getStockId());
     return add(editStockReq);
   }
 }

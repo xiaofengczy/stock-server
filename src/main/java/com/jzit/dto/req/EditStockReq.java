@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class EditStockReq extends AddStockReq {
-
-  private String traderId;
+  private String stockId;
 }
