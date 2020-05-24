@@ -64,13 +64,13 @@ public class TraderServiceImpl implements TraderService {
   }
 
   @Override
-  public Result<TraderDTO> getStock(String id) {
+  public Result<TraderDTO> getTrader(String id) {
     TraderDTO traderDTO = mongoTemplate.findById(id, TraderDTO.class);
     return Result.success(traderDTO);
   }
 
   @Override
-  public Result<Boolean> deleteStock(String id) {
+  public Result<Boolean> deleteTrader(String id) {
     Query query = new Query();
     query.addCriteria(Criteria.where("_id").is(id));
     mongoTemplate.remove(query, TraderDTO.class);
@@ -78,8 +78,8 @@ public class TraderServiceImpl implements TraderService {
   }
 
   @Override
-  public Result<TraderDTO> editStock(EditTraderReq editTraderReq) {
-    deleteStock(editTraderReq.getTraderId());
+  public Result<TraderDTO> editTrader(EditTraderReq editTraderReq) {
+    deleteTrader(editTraderReq.getTraderId());
     return addTrader(editTraderReq);
   }
 }

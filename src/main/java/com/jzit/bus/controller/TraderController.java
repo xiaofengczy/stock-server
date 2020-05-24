@@ -41,16 +41,16 @@ public class TraderController {
 
   @GetMapping("/getTrader/{id}")
   public Result<TraderDTO> getTrader(@PathVariable String id){
-    return traderService.getStock(id);
+    return traderService.getTrader(id);
   }
 
   @DeleteMapping("/delTrader/{id}")
   public Result<Boolean> delTrader(@PathVariable String id){
-    return traderService.deleteStock(id);
+    return traderService.deleteTrader(id);
   }
 
   @PostMapping("/editTrader")
   public Result<TraderDTO> editTrader(@RequestBody EditTraderReq editTraderReq){
-    return traderService.editStock(editTraderReq);
+    return traderService.editTrader(editTraderReq);
   }
 }

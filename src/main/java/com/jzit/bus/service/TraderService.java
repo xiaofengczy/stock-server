@@ -19,9 +19,9 @@ public interface TraderService {
 
   Result<List<TraderDTO>> listTrader(PageTraderReq pageTraderReq);
 
-  Result<TraderDTO> getStock(String id);
+  Result<TraderDTO> getTrader(String id);
 
-  Result<Boolean> deleteStock(String id);
+  Result<Boolean> deleteTrader(String id);
 
-  Result<TraderDTO> editStock(EditTraderReq editTraderReq);
+  Result<TraderDTO> editTrader(EditTraderReq editTraderReq);
 }
