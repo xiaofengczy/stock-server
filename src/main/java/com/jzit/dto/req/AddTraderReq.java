@@ -1,4 +1,4 @@
-package com.jzit.dto;
+package com.jzit.dto.req;
 
 import lombok.Data;
 

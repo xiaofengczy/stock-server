@@ -1,7 +1,8 @@
 package com.jzit.bus.service.impl;
 
 import com.jzit.bus.service.StockService;
-import com.jzit.dto.AddTraderReq;
+import com.jzit.dto.req.AddTraderReq;
+import com.jzit.dto.req.EditTraderReq;
 import com.jzit.dto.req.PageTraderReq;
 import com.jzit.entity.TraderDTO;
 import com.jzit.utils.DateUtil;
@@ -36,7 +37,6 @@ public class StockServiceImpl implements StockService {
     long traderTimeLong = DateUtil.strToLong(traderTime, DateUtil.DATE_FORMAT);
     traderDTO.setTraderTime(traderTimeLong);
     traderDTO.setInputTime(new Date().getTime());
-
     TraderDTO result = mongoTemplate.save(traderDTO);
     return Result.success(result);
   }
@@ -50,7 +50,8 @@ public class StockServiceImpl implements StockService {
     String traderId = pageTraderReq.getTraderId();
     String title = pageTraderReq.getTitle();
     if (!StringUtils.isEmpty(traderDate)) {
-      query.addCriteria(Criteria.where("traderTime").is(traderDate));
+      long traderTimeLong = DateUtil.strToLong(traderDate, DateUtil.DATE_FORMAT);
+      query.addCriteria(Criteria.where("traderTime").is(traderTimeLong));
     }
     if (!StringUtils.isEmpty(traderId)) {
       query.addCriteria(Criteria.where("_id").is(traderId));
@@ -74,5 +75,11 @@ public class StockServiceImpl implements StockService {
     query.addCriteria(Criteria.where("_id").is(id));
     mongoTemplate.remove(query, TraderDTO.class);
     return Result.success(true);
+  }
+
+  @Override
+  public Result<TraderDTO> editStock(EditTraderReq editTraderReq) {
+    deleteStock(editTraderReq.getTraderId());
+    return addTrader(editTraderReq);
   }
 }
