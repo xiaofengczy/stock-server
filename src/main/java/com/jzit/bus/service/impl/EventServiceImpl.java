@@ -8,9 +8,7 @@ import com.jzit.dto.res.PageEventRes;
 import com.jzit.entity.EventDTO;
 import com.jzit.utils.DateUtil;
 import com.jzit.utils.Result;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.beans.BeanUtils;
@@ -20,7 +18,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.util.unit.DataUnit;
 
 @Service
 public class EventServiceImpl implements EventService {
