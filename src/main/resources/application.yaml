@@ -11,4 +11,4 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://stock:stock_2012_mongo@148.70.30.245:27017/stock
+      uri: mongodb://stock:stock_2012_mongo@localhost:27017/stock
