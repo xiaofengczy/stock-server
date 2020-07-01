@@ -1,31 +1,58 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package com.jzit.utils;
 
-/**
- * @author caozhongyu
- * @create 2020-05-19
- */
-public enum ResultCode {
-  SUCCESS("0000","success"),
-  PARAM_IS_INVALID("1001","参数无效"),
-  PARAM_IS_BLANK("1002","参数为空"),
-  //用户相关
-  USER_NO_LOGGED_IN("2001","用户未登录"),
-  USER_LOGIN_ERROR("2002","账号不存在或密码错误"),
-  USER_NOT_EXIST("2003","用户不存在"),
-  USER_HAS_EXISTED("2004","用户已存在");
+import java.io.Serializable;
 
+public final class ResultCode implements Serializable {
+  public static final ResultCode SUCCESS = new ResultCode("000000");
+  public static final ResultCode RESOURCE_NOT_EXIST = new ResultCode("100002", "资源不存在");
+  public static final ResultCode UNKNOWN_ERR = new ResultCode("100003", "未知的服务错误");
+  public static final ResultCode INTERNAL_ERR = new ResultCode("100004", "业务系统底层异常");
+  public static final ResultCode INVALID_ARGS = new ResultCode("100005", "提交的参数验证不通过");
   private String code;
   private String message;
 
-  ResultCode(String code, String message) {
+  private ResultCode(String code, String message) {
     this.code = code;
     this.message = message;
   }
 
-  public String code(){
+  private ResultCode(String code) {
+    this.code = code;
+  }
+
+  public ResultCode() {
+  }
+
+  public static ResultCode ofMessageAndCode(String message, String code) {
+    return new ResultCode(code, message);
+  }
+
+  public static ResultCode of(String code, String message) {
+    return new ResultCode(code, message);
+  }
+
+  public static ResultCode of(String code) {
+    return new ResultCode(code);
+  }
+
+  public String getCode() {
     return this.code;
   }
-  public String message(){
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  public String getMessage() {
     return this.message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
   }
 }

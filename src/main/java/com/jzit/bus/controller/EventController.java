@@ -1,10 +1,10 @@
 package com.jzit.bus.controller;
 
 import com.jzit.bus.service.EventService;
-import com.jzit.dto.req.EditEventReq;
-import com.jzit.dto.req.EventReq;
-import com.jzit.dto.req.PageEventReq;
-import com.jzit.dto.res.PageEventRes;
+import com.jzit.dto.request.EditEventReq;
+import com.jzit.dto.request.EventReq;
+import com.jzit.dto.request.PageEventReq;
+import com.jzit.dto.response.PageEventRes;
 import com.jzit.entity.EventDTO;
 import com.jzit.utils.Result;
 import javax.annotation.Resource;

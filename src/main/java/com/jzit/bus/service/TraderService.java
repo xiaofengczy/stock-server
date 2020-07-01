@@ -1,16 +1,16 @@
 package com.jzit.bus.service;
 
-import com.jzit.dto.req.AddTraderReq;
-import com.jzit.dto.req.EditTraderReq;
-import com.jzit.dto.req.PageTraderReq;
-import com.jzit.dto.res.PageTraderRes;
+import com.jzit.dto.request.AddTraderReq;
+import com.jzit.dto.request.EditTraderReq;
+import com.jzit.dto.request.PageTraderReq;
+import com.jzit.dto.response.PageTraderRes;
 import com.jzit.entity.TraderDTO;
 import com.jzit.utils.Result;
 
 /**
  * FileName: StockService Description:
  *
- * @author caozhongyu
+ * @author milk
  * @create 2020/5/19
  */
 public interface TraderService {

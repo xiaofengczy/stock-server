@@ -1,10 +1,10 @@
 package com.jzit.bus.controller;
 
 import com.jzit.bus.service.StockService;
-import com.jzit.dto.req.AddStockReq;
-import com.jzit.dto.req.EditStockReq;
-import com.jzit.dto.req.PageStockReq;
-import com.jzit.dto.res.PageStockRes;
+import com.jzit.dto.request.AddStockReq;
+import com.jzit.dto.request.EditStockReq;
+import com.jzit.dto.request.PageStockReq;
+import com.jzit.dto.response.PageStockRes;
 import com.jzit.entity.StockDTO;
 import com.jzit.utils.Result;
 import javax.annotation.Resource;

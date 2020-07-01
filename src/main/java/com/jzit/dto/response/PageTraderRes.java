@@ -1,6 +1,5 @@
-package com.jzit.dto.res;
+package com.jzit.dto.response;
 
-import com.jzit.entity.StockDTO;
 import com.jzit.entity.TraderDTO;
 import java.util.List;
 import lombok.Data;

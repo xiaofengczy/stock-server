@@ -1,16 +1,15 @@
-package com.jzit.dto.res;
+package com.jzit.dto.response;
 
-import com.jzit.entity.EventDTO;
 import com.jzit.entity.StockDTO;
 import java.util.List;
 import lombok.Data;
 
 @Data
-public class PageEventRes {
+public class PageStockRes {
 
   private Integer total;
 
-  private List<EventDTO> eventList;
+  private List<StockDTO> stockList;
 
   private Integer page;
 
