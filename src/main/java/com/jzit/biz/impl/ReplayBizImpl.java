@@ -3,7 +3,6 @@ package com.jzit.biz.impl;
 import com.jzit.bo.FieldNameEnum;
 import com.jzit.bo.ExcelDataBO;
 import com.jzit.biz.ReplayBiz;
-import com.jzit.controller.ReplayController;
 import com.jzit.exception.BusinessException;
 import com.jzit.service.impl.ReplayService;
 import com.jzit.utils.ExcelUtil;
@@ -49,25 +48,28 @@ public class ReplayBizImpl implements ReplayBiz {
       logger.warn("上传的Excel数据文件为空！上传时间：【{}】", new Date());
       throw new BusinessException("上传的Excel数据文件为空！");
     }
+    //创建文件夹
+    File fileDir = new File(uploadLocation);
+    if (!fileDir.isDirectory()) {
+      //递归生成文件夹
+      fileDir.mkdirs();
+    }
     //上传文件保存至服务器
-    saveUploadFile(uploadFile);
+    saveUploadFile(uploadFile, fileDir);
     //解析excel
     List<ExcelDataBO> parsedResult = readExcel(uploadFile);
     //保存数据
     replayService.saveExcelData(parsedResult);
+    //删除上传文件
+    fileDir.delete();
   }
 
   /**
    * 文件保存至服务器
    */
-  private void saveUploadFile(MultipartFile uploadFile) {
+  private void saveUploadFile(MultipartFile uploadFile, File fileDir) {
     try {
-      //创建文件夹
-      File fileDir = new File(uploadLocation);
-      if (!fileDir.isDirectory()) {
-        //递归生成文件夹
-        fileDir.mkdirs();
-      }
+
       //创建文件
       File realFile = new File(
           fileDir.getAbsolutePath() + File.separator + uploadFile.getOriginalFilename());
