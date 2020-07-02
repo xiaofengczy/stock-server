@@ -1,15 +1,15 @@
-package com.jzit.bo;
+package com.jzit.dao.entity;
 
 import lombok.Data;
 
 /**
- * FileName: ExcelDataReq Description:
+ * FileName: Stock Description:
  *
- * @author milk
- * @create 2020/7/1
+ * @author caozhongyu
+ * @create 2020/7/2
  */
 @Data
-public class ExcelDataBO {
+public class Stock {
 
   /**代码*/
   private String code;

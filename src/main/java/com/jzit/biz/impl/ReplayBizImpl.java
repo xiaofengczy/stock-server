@@ -13,8 +13,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
@@ -23,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -56,12 +60,26 @@ public class ReplayBizImpl implements ReplayBiz {
     }
     //上传文件保存至服务器
     saveUploadFile(uploadFile, fileDir);
+    //处理映射关系
     //解析excel
-    List<ExcelDataBO> parsedResult = readExcel(uploadFile);
+    List<ExcelDataBO> parsedResult = readExcel(uploadFile, ExcelDataBO.class,processFieldMap());
     //保存数据
     replayService.saveExcelData(parsedResult);
     //删除上传文件
-    fileDir.delete();
+    deleteFile(fileDir, uploadFile);
+  }
+
+  private Map<String, String> processFieldMap() {
+    FieldNameEnum[] values = FieldNameEnum.values();
+    Map<String, String> map = new HashMap<>();
+    Arrays.stream(values).forEach(value -> map.put(value.getName(), value.getField()));
+    return map;
+  }
+
+  private void deleteFile(File fileDir, MultipartFile uploadFile) {
+    File realFile = new File(
+        fileDir.getAbsolutePath() + File.separator + uploadFile.getOriginalFilename());
+    realFile.delete();
   }
 
   /**
@@ -69,7 +87,6 @@ public class ReplayBizImpl implements ReplayBiz {
    */
   private void saveUploadFile(MultipartFile uploadFile, File fileDir) {
     try {
-
       //创建文件
       File realFile = new File(
           fileDir.getAbsolutePath() + File.separator + uploadFile.getOriginalFilename());
@@ -95,7 +112,8 @@ public class ReplayBizImpl implements ReplayBiz {
    *
    * @return 读取结果列表，读取失败时返回null
    */
-  public List<ExcelDataBO> readExcel(MultipartFile uploadFile) {
+  public <T> List<T> readExcel(MultipartFile uploadFile, Class<T> t,
+      Map<String, String> fieldMap) {
     Workbook workbook = null;
     FileInputStream inputStream = null;
     String fileName = uploadFile.getOriginalFilename();
@@ -113,7 +131,7 @@ public class ReplayBizImpl implements ReplayBiz {
           .handleFileToExcel(new FileInputStream(excelFile), fileType);
 
       //获取excel数据
-      List<ExcelDataBO> excelDataBOList = parseExcelData(excelDataList);
+      List<T> excelDataBOList = parseExcelData(excelDataList, t,fieldMap);
       return excelDataBOList;
     } catch (Exception e) {
       logger.warn("解析Excel失败，文件名：" + fileName + " 错误信息：" + e.getMessage());
@@ -133,41 +151,77 @@ public class ReplayBizImpl implements ReplayBiz {
     }
   }
 
-  private List<ExcelDataBO> parseExcelData(List<List<String>> excelDataList) {
-    List<ExcelDataBO> excelDataBOList = new ArrayList<>();
+  private <T> List<T> parseExcelData1(List<List<String>> excelDataList, Class<T> clazz) {
+    List<T> tList = new ArrayList<>();
     if (CollectionUtils.isEmpty(excelDataList)) {
-      return excelDataBOList;
+      return tList;
     }
-    //标题行
-    List<String> excelTitle = excelDataList.get(0);
-    for (int i = 1; i < excelDataList.size(); i++) {
-      ExcelDataBO excelDataBO = new ExcelDataBO();
-      List<String> dataList = excelDataList.get(i);
-      for (int j = 0; j < dataList.size(); j++) {
-        String title = excelTitle.get(j);
-        FieldNameEnum fieldNameEnum = FieldNameEnum.getByName(title);
-        if (Objects.isNull(fieldNameEnum)) {
-          continue;
+    try {
+      //标题行
+      List<String> excelTitle = excelDataList.get(0);
+      for (int i = 1; i < excelDataList.size(); i++) {
+        T t = clazz.newInstance();
+        List<String> dataList = excelDataList.get(i);
+        for (int j = 0; j < dataList.size(); j++) {
+          String title = excelTitle.get(j);
+          FieldNameEnum fieldNameEnum = FieldNameEnum.getByName(title);
+          if (Objects.isNull(fieldNameEnum)) {
+            continue;
+          }
+          String field = fieldNameEnum.getField();
+          String value = dataList.get(j);
+          //反射获取对象set方法
+          setObjValue(field, value, t);
         }
-        String field = fieldNameEnum.getField();
-        String value = dataList.get(j);
-        //反射获取对象set方法
-        setObjValue(field, value, excelDataBO);
+        tList.add(t);
       }
-      excelDataBOList.add(excelDataBO);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    return excelDataBOList;
+
+    return tList;
+  }
+
+  private <T> List<T> parseExcelData(List<List<String>> excelDataList, Class<T> clazz,
+      Map<String, String> fieldMap) {
+    List<T> tList = new ArrayList<>();
+    if (CollectionUtils.isEmpty(excelDataList)) {
+      return tList;
+    }
+    try {
+      //标题行
+      List<String> excelTitle = excelDataList.get(0);
+      for (int i = 1; i < excelDataList.size(); i++) {
+        T t = clazz.newInstance();
+        List<String> dataList = excelDataList.get(i);
+        for (int j = 0; j < dataList.size(); j++) {
+          String title = excelTitle.get(j);
+          String field = fieldMap.get(title);
+          if (StringUtils.isEmpty(field)) {
+            continue;
+          }
+          String value = dataList.get(j);
+          //反射获取对象set方法
+          setObjValue(field, value, t);
+        }
+        tList.add(t);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return tList;
   }
 
   /**
    * 构造参数设值
    */
-  private void setObjValue(String field, String value, ExcelDataBO excelDataBO) {
+  private <T> void setObjValue(String field, String value, T t) {
     try {
-      PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field, ExcelDataBO.class);
+      PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field, t.getClass());
       Method writeMethod = propertyDescriptor.getWriteMethod();
       writeMethod.setAccessible(true);
-      writeMethod.invoke(excelDataBO, value);
+      writeMethod.invoke(t, value);
     } catch (Exception e) {
       e.printStackTrace();
     }
