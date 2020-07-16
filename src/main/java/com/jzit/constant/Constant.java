@@ -31,4 +31,8 @@ public class Constant {
 
   public static final ResultCode EXCEL_TITLE_ERROR =
       ResultCode.of("FORM0185", "导入文件表头已被修改,请调整后重试.");
+
+  public static final String ADMIN_TYPE = "admin";
+  public static final String CLIENT_TYPE = "client";
+  public static final String APP_TYPE = "app";
 }

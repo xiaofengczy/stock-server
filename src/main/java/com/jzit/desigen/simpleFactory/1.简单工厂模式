@@ -1,0 +1,6 @@
+ 案例分析:
+  现有登陆场景，管理后台登陆、用户前台登陆、APP登陆、小程序登陆四种登陆方式，根据请求host判定走那种方式鉴权
+  1.管理后台host:admin.test.cn
+  2.用户后台host:user.test.cn
+  3.app对应host:api.test.cn
+  4.根据host选择执行具体的登陆鉴权
